@@ -12,7 +12,7 @@ class Vacancy
     /** @var string */
     private $description;
     /** @var VacancyTranslation[] */
-    private $vacancyTranslation = [];
+    private $translations = [];
 
     /**
      * @param Department $department
@@ -23,12 +23,12 @@ class Vacancy
     }
 
     /**
-     * @param VacancyTranslation $vacancyTranslation
+     * @param VacancyTranslation $translation
      */
-    public function addVacancyTranslation(VacancyTranslation $vacancyTranslation)
+    public function addTranslation(VacancyTranslation $translation)
     {
-        $languageShortName = $vacancyTranslation->getLanguage()->getShortName();
-        $this->vacancyTranslation[$languageShortName] = $vacancyTranslation;
+        $languageShortName = $translation->getLanguage()->getShortName();
+        $this->translations[$languageShortName] = $translation;
     }
 
     /**

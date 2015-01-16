@@ -5,8 +5,8 @@ class VacancyTranslation
 {
     /** @var int */
     private $id;
-    /** @var int */
-    private $vacancyId;
+    /** @var Vacancy */
+    private $vacancy;
     /** @var Language */
     private $language;
     /** @var string */
@@ -15,25 +15,25 @@ class VacancyTranslation
     private $description;
 
     /**
-     * @param int $vacancyId
+     * @param Vacancy $vacancy
      * @param Language $language
      * @param string $title
      * @param string $description
      */
-    public function __construct($vacancyId, Language $language, $title, $description)
+    public function __construct(Vacancy $vacancy, Language $language, $title, $description)
     {
-        $this->vacancyId = (int) $vacancyId;
+        $this->vacancy = $vacancy;
         $this->language = $language;
         $this->title = $title;
         $this->description = $description;
     }
 
     /**
-     * @return int
+     * @return Vacancy
      */
-    public function getVacancyId()
+    public function getVacancy()
     {
-        return $this->vacancyId;
+        return $this->vacancy;
     }
 
     /**

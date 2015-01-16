@@ -5,5 +5,13 @@
 
         <field name="title" type="text" column="title" length="100" nullable="false"/>
         <field name="description" type="text" column="description" nullable="false"/>
+
+        <one-to-one field="vacancy" target-entity="Vacancy\UiBundle\Entity\Vacancy">
+            <join-column name="vacancy_id" referenced-column-name="id" />
+        </one-to-one>
+
+        <one-to-one field="language" target-entity="Vacancy\UiBundle\Entity\Language">
+            <join-column name="language_id" referenced-column-name="id" />
+        </one-to-one>
     </entity>
 </doctrine-mapping>
