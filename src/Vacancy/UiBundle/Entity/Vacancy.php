@@ -16,10 +16,12 @@ class Vacancy
 
     /**
      * @param Department $department
+     * @param string $title
      */
-    public function __construct(Department $department)
+    public function __construct(Department $department, $title)
     {
         $this->department = $department;
+        $this->title = $title;
     }
 
     /**
@@ -29,6 +31,14 @@ class Vacancy
     {
         $languageShortName = $translation->getLanguage()->getShortName();
         $this->translations[$languageShortName] = $translation;
+    }
+
+    /**
+     * @return VacancyTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 
     /**
@@ -45,14 +55,6 @@ class Vacancy
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
     }
 
     /**

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="utilsBundle.command.fillDb" class="Vacancy\UtilsBundle\Command\FillDbCommand">
+            <tag name="console.command" />
+            <call method="setVacancyRepository">
+                <argument type="service" id="uiBundle.vacancy.repository" />
+            </call>
+            <call method="setDepartmentRepository">
+                <argument type="service" id="uiBundle.department.repository" />
+            </call>
+            <call method="setLanguageRepository">
+                <argument type="service" id="uiBundle.language.repository" />
+            </call>
+        </service>
+
+    </services>
+</container>

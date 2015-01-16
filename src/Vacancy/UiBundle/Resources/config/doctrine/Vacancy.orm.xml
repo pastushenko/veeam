@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Vacancy\UiBundle\Entity\Vacancy" table="vacancy" repository-class="Vacancy\UiBundle\Repository\VacancyRepository">
-        <id name="id" type="integer" column="id" />
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
         <field name="title" type="text" column="title" length="100" nullable="false"/>
-        <field name="description" type="text" column="description" nullable="false"/>
+        <field name="description" type="text" column="description" nullable="true"/>
 
         <one-to-one field="department" target-entity="Vacancy\UiBundle\Entity\Department">
             <join-column name="department_id" referenced-column-name="id" />
@@ -11,6 +13,10 @@
         <one-to-many
                 field="translations"
                 target-entity="Vacancy\UiBundle\Entity\VacancyTranslation"
-                mapped-by="vacancy" />
+                mapped-by="vacancy">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

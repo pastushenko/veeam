@@ -18,14 +18,12 @@ class VacancyTranslation
      * @param Vacancy $vacancy
      * @param Language $language
      * @param string $title
-     * @param string $description
      */
-    public function __construct(Vacancy $vacancy, Language $language, $title, $description)
+    public function __construct(Vacancy $vacancy, Language $language, $title)
     {
         $this->vacancy = $vacancy;
         $this->language = $language;
         $this->title = $title;
-        $this->description = $description;
     }
 
     /**
@@ -53,19 +51,19 @@ class VacancyTranslation
     }
 
     /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
      * @return string
      */
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = (int) $id;
     }
 
     /**
