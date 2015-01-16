@@ -1,0 +1,3 @@
+vacancy:
+    pattern:  /
+    defaults: { _controller: uiBundle.vacancy.controller:browseAction }
