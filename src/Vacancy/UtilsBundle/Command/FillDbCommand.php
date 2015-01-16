@@ -13,6 +13,7 @@ use Vacancy\UiBundle\Repository\LanguageRepository;
 use Vacancy\UiBundle\Repository\VacancyRepository;
 use Vacancy\UtilsBundle\Exception\EntityNotFoundException;
 use Vacancy\UtilsBundle\Exception\RepositoryNotEmptyException;
+use Vacancy\UtilsBundle\Repository\DefaultDataRepository;
 
 class FillDbCommand extends Command
 {
@@ -22,53 +23,16 @@ class FillDbCommand extends Command
     private $departmentRepository;
     /** @var LanguageRepository */
     private $languageRepository;
+    /** @var DefaultDataRepository */
+    private $defaultDataRepository;
 
-    /** @var [] */
-    private $defaultLanguages = [
-        'en' => 'English',
-        'fr' => 'French',
-        'it' => 'Italian',
-        'ru' => 'Russian'
-    ];
-    /** @var [] */
-    private $defaultDepartments = ['IT', 'HR', 'Sales', 'Marketing', 'Support'];
-    /** @var [] */
-    private $defaultVacancies = [
-        [
-            'title' => 'vacancy #1 en',
-            'description' => 'description #1 en',
-            'department' => 'IT',
-            'translations' => [
-                [
-                    'language' => 'it',
-                    'title' => 'vacancy #1 it',
-                    'description' => 'description #1 it',
-                ],
-                [
-                    'language' => 'fr',
-                    'title' => 'vacancy #1 it',
-                    'description' => 'description #1 it',
-                ],
-            ]
-        ],
-        [
-            'title' => 'vacancy #2 en',
-            'description' => 'description #2 en',
-            'department' => 'Sales',
-            'translations' => [
-                [
-                    'language' => 'ru',
-                    'title' => 'vacancy #2 it',
-                    'description' => 'description #2 it',
-                ],
-                [
-                    'language' => 'fr',
-                    'title' => 'vacancy #2 it',
-                    'description' => 'description #2 it',
-                ],
-            ]
-        ]
-    ];
+    /**
+     * @param DefaultDataRepository $defaultDataRepository
+     */
+    public function setDefaultDataRepository(DefaultDataRepository $defaultDataRepository)
+    {
+        $this->defaultDataRepository = $defaultDataRepository;
+    }
 
     /**
      * @param VacancyRepository $vacancyRepository
@@ -179,10 +143,22 @@ class FillDbCommand extends Command
     /**
      * @throws \Exception
      */
+    private function getDefaultDataRepository()
+    {
+        if (is_null($this->defaultDataRepository)) {
+            throw new \Exception('You must inject default data repository in fill db command (call setDefaultDataRepository()).');
+        }
+
+        return $this->defaultDataRepository;
+    }
+
+    /**
+     * @throws \Exception
+     */
     private function getVacancyRepository()
     {
         if (is_null($this->vacancyRepository)) {
-            throw new \Exception('You must inject vacancy repository in fill db command.');
+            throw new \Exception('You must inject vacancy repository in fill db command (call setVacancyRepository()).');
         }
 
         return $this->vacancyRepository;
@@ -194,7 +170,7 @@ class FillDbCommand extends Command
     private function getDepartmentRepository()
     {
         if (is_null($this->departmentRepository)) {
-            throw new \Exception('You must inject department repository in fill db command.');
+            throw new \Exception('You must inject department repository in fill db command (call setDepartmentRepository()).');
         }
 
         return $this->departmentRepository;
@@ -206,7 +182,7 @@ class FillDbCommand extends Command
     private function getLanguageRepository()
     {
         if (is_null($this->languageRepository)) {
-            throw new \Exception('You must inject language repository in fill db command.');
+            throw new \Exception('You must inject language repository in fill db command (call setLanguageRepository()).');
         }
 
         return $this->languageRepository;
@@ -214,7 +190,7 @@ class FillDbCommand extends Command
 
     private function fillLanguages()
     {
-        foreach ($this->defaultLanguages as $shortName => $title) {
+        foreach ($this->getDefaultLanguages() as $shortName => $title) {
             $language = new Language($shortName, $title);
             $this->languageRepository->persist($language);
         }
@@ -222,7 +198,7 @@ class FillDbCommand extends Command
 
     private function fillDepartments()
     {
-        foreach ($this->defaultDepartments as $departmentTitle) {
+        foreach ($this->getDefaultDepartments() as $departmentTitle) {
             $department = new Department($departmentTitle);
             $this->departmentRepository->persist($department);
         }
@@ -230,7 +206,7 @@ class FillDbCommand extends Command
 
     private function fillVacancies()
     {
-        foreach ($this->defaultVacancies as $vacancyArray) {
+        foreach ($this->getDefaultVacancies() as $vacancyArray) {
 
             $department = $this->getVacancyDepartment($vacancyArray);
             $vacancy = new Vacancy($department, $vacancyArray['title']);
@@ -328,5 +304,29 @@ class FillDbCommand extends Command
         $this->vacancyRepository->rollback();
         $this->departmentRepository->rollback();
         $this->languageRepository->rollback();
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultLanguages()
+    {
+        return $this->getDefaultDataRepository()->getDefaultLanguages();
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultDepartments()
+    {
+        return $this->getDefaultDataRepository()->getDefaultDepartments();
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultVacancies()
+    {
+        return $this->getDefaultDataRepository()->getDefaultVacancies();
     }
 }

@@ -8,6 +8,9 @@
 
         <service id="utilsBundle.command.fillDb" class="Vacancy\UtilsBundle\Command\FillDbCommand">
             <tag name="console.command" />
+            <call method="setDefaultDataRepository">
+                <argument type="service" id="utilsBundle.defaultData.repository" />
+            </call>
             <call method="setVacancyRepository">
                 <argument type="service" id="uiBundle.vacancy.repository" />
             </call>
@@ -19,5 +22,6 @@
             </call>
         </service>
 
+        <service id="utilsBundle.defaultData.repository" class="Vacancy\UtilsBundle\Repository\DefaultDataRepository" />
     </services>
 </container>

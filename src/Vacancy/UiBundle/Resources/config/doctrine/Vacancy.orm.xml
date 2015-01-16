@@ -7,9 +7,6 @@
         <field name="title" type="text" column="title" length="100" nullable="false"/>
         <field name="description" type="text" column="description" nullable="true"/>
 
-        <one-to-one field="department" target-entity="Vacancy\UiBundle\Entity\Department">
-            <join-column name="department_id" referenced-column-name="id" />
-        </one-to-one>
         <one-to-many
                 field="translations"
                 target-entity="Vacancy\UiBundle\Entity\VacancyTranslation"
@@ -18,5 +15,8 @@
                 <cascade-persist />
             </cascade>
         </one-to-many>
+        <many-to-one field="department" target-entity="Vacancy\UiBundle\Entity\Department">
+            <join-column name="department_id" referenced-column-name="id" />
+        </many-to-one>
     </entity>
 </doctrine-mapping>

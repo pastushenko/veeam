@@ -72,4 +72,12 @@ class Vacancy
     {
         $this->description = $description;
     }
+
+    /**
+     * @return Department
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
 }

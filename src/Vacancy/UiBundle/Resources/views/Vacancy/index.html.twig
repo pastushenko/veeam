@@ -2,5 +2,37 @@
 
 {% block content %}
     <h1>Вакансии</h1>
-
+    <form id="filters">
+        <div class="col-lg-4">
+            <label for="department">Department</label>
+            <select id="department" name="department">
+                <option value="0">all</option>
+                {% for department in departments %}
+                    <option value="{{ department.id }}">{{ department.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+    <table class="col-lg-12">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Department</th>
+                <th>Language</th>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vacancy in vacancies %}
+            <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                <td>{{ vacancy.id }}</td>
+                <td>{{ vacancy.department.title }}</td>
+                <td>Language</td>
+                <td>{{ vacancy.title }}</td>
+                <td>{{ vacancy.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
