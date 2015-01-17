@@ -6,13 +6,13 @@
     <div class="row">
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <select id="department" name="department" class="form-control">
+                <select id="department" name="{{ constant('FilterDto::KEY_DEPARTMENT_ID') }}" class="form-control">
                     <option value="0">Select Department</option>
                     {% for department in departments %}
                         <option value="{{ department.id }}">{{ department.title }}</option>
                     {% endfor %}
                 </select>
-                <select id="language" name="language" class="form-control">
+                <select id="language" name="{{ constant('FilterDto::KEY_LANGUAGE_ID') }}" class="form-control">
                     <option value="0">English</option>
                     {% for language in languages %}
                         <option value="{{ language.id }}">{{ language.title }}</option>
