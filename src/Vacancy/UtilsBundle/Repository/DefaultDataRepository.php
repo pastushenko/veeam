@@ -88,7 +88,7 @@ class DefaultDataRepository
                     [
                         'language' => 'ru',
                         'title' => 'vacancy #5 ru',
-                        'description' => 'description #1 ru. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        'description' => 'description #5 ru. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
                     ]
                 ]
             ],

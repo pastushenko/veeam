@@ -37,7 +37,7 @@ class VacancyTranslationRepository extends EntityRepository
         Language $language
     ) {
         $translation = new VacancyTranslation($vacancy, $language, $translationValidator->getTitle());
-        $translation->getDescription($translationValidator->getDescription());
+        $translation->setDescription($translationValidator->getDescription());
 
         $this->getEntityManager()->persist($translation);
         $this->getEntityManager()->flush();

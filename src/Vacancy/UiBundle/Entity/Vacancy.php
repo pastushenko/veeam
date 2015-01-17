@@ -88,7 +88,7 @@ class Vacancy
     {
         $translationArray = [];
         foreach ($this->getTranslations() as $translation) {
-            $translationArray[$translation->getId()] = $translation->toArray();
+            $translationArray[] = $translation->toArray();
         }
 
         return [

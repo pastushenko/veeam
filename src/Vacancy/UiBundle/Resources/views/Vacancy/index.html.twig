@@ -2,17 +2,65 @@
 
 {% block content %}
     {% import _self as helper %}
-    <h1>Vacancy list</h1>
+    <h1>Vacancy list <a href="#" class="show-vacancy-form-btn">+</a></h1>
+    <!---------------------------------------- Add vacancy form ---------------------------------->
+    <div class="add-vacancy-block">
+        <h2>Add vacancy form <a href="#" class="hide-vacancy-form-btn">hide</a></h2>
+        <form id="add-vacancy" method="post" action="{{ path('api_vacancy_add') }}">
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <label for="vacancyTitle">Title:</label>
+                    <input type="text" required="required" id="vacancyTitle" maxlength="100" name="vacancy[title]" class="form-control" />
+                </div>
+
+                <div class="form-group col-lg-2">
+                    <label for="vacancyDepartment">Department:</label>
+                    <select id="vacancyDepartment" name="vacancy[department]" class="form-control">
+                        {% for department in departments %}
+                            <option value="{{ department.id }}">{{ department.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <label for="vacancyDescription">Description:</label>
+                    <textarea id="vacancyDescription" name="vacancy[description]" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <fieldset>
+                <legend>Translations</legend>
+                <div class="row">
+                    {% for language in languages %}
+
+                        <div class="form-group col-lg-4">
+                            <label for="vacancyTitle">Title ({{ language.shortName }}):</label>
+                            <input type="text" id="vacancyTitle" maxlength="100" name="vacancy[translation][{{ language.id }}][title]" class="form-control" />
+
+                            <label for="vacancyDescription">Description ({{ language.shortName }}):</label>
+                            <textarea id="vacancyDescription" name="vacancy[translation][{{ language.id }}][description]" class="form-control"></textarea>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+            <button type="submit" class="btn btn-primary col-lg-2">Submit</button>
+            <button class="btn btn-default col-lg-1 hide-vacancy-form-btn">Cancel</button>
+        </form>
+    </div>
+    <!---------------------------------------- /Add vacancy form ---------------------------------->
+    <div style="clear:both;"></div>
+    <!---------------------------------------- Vacancy filters ---------------------------------->
     <div class="row">
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" id="filter-form" role="search" action="{{ path('api_vacancy_list') }}" method="get">
             <div class="form-group">
-                <select id="department" name="department" class="form-control">
+                <select id="department" name="department" class="form-control filter-controls">
                     <option value="0">Select Department</option>
                     {% for department in departments %}
                         <option value="{{ department.id }}">{{ department.title }}</option>
                     {% endfor %}
                 </select>
-                <select id="language" name="language" class="form-control">
+                <select id="language" name="language" class="form-control filter-controls">
                     <option value="0">English</option>
                     {% for language in languages %}
                         <option value="{{ language.id }}">{{ language.title }}</option>
@@ -21,7 +69,10 @@
             </div>
         </form>
     </div>
+    <!---------------------------------------- /Vacancy filters ---------------------------------->
     <div style="clear:both;"></div>
+
+    <!---------------------------------------- Vacancy table ---------------------------------->
     <div class="panel panel-default">
         <div class="panel-heading"><strong>Results:</strong></div>
         <div class="panel-body">
@@ -36,67 +87,206 @@
                     <th width="15%">Action</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="vacancy-table-body">
                 {% for vacancy in vacancies %}
                     <tr id="vacancy_{{ vacancy.id }}" {% if loop.index is odd %}class="odd"{% endif %}>
-                        <td>{{ vacancy.id }}</td>
-                        <td>{{ vacancy.department.title }}</td>
-                        <td>English</td>
-                        <td>{{ vacancy.title }}</td>
-                        <td>{{ vacancy.description }}</td>
+                        <td class="vacancy-id">{{ vacancy.id }}</td>
+                        <td class="vacancy-department">{{ vacancy.department.title }}</td>
+                        <td class="vacancy-language">English</td>
+                        <td class="vacancy-title">{{ vacancy.title }}</td>
+                        <td class="vacancy-description">{{ vacancy.description }}</td>
                         <td>
-                            <button title="Edit vacancy" data-vacancy-id="{{ vacancy.id }}" class="glyphicon glyphicon-pencil edit-vacancy"></button>
-                            <button title="Remove vacancy" data-vacancy-id="{{ vacancy.id }}" class="glyphicon glyphicon-minus remove-vacancy"></button>
+                            <button title="Remove vacancy" data-url="{{ path("api_vacancy_remove", {'vacancyId': vacancy.id}) }}" data-vacancy-id="{{ vacancy.id }}" class="glyphicon glyphicon-minus remove-vacancy"></button>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <table class="hidden">
+                <tr id="vacancy_" class="vacancy-row-template">
+                    <td class="vacancy-id"></td>
+                    <td class="vacancy-department"></td>
+                    <td class="vacancy-language">English</td>
+                    <td class="vacancy-title"></td>
+                    <td class="vacancy-description"></td>
+                    <td>
+                        <button title="Remove vacancy"  data-url="{{ path("api_vacancy_remove", {'vacancyId': 0}) }}" data-vacancy-id="" class="glyphicon glyphicon-minus remove-vacancy"></button>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-
-    <h2>Add vacancy:</h2>
-    <form id="addVacancy" method="post" action="{{ path('api_vacancy_add') }}">
-            <div class="row">
-                <div class="form-group col-lg-4">
-                    <label for="vacancyTitle">Title:</label>
-                    <input type="text" id="vacancyTitle" maxlength="100" name="vacancy[title]" class="form-control" />
-                </div>
-
-                <div class="form-group col-lg-2">
-                    <label for="vacancyDepartment">Department:</label>
-                    <select id="vacancyDepartment" name="vacancy[department]" class="form-control">
-                        {% for department in departments %}
-                            <option value="{{ department.id }}">{{ department.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+    <!---------------------------------------- /Vacancy table ---------------------------------->
 
 
-            </div>
-            <div class="row">
-                <div class="form-group col-lg-4">
-                    <label for="vacancyDescription">Description:</label>
-                    <textarea id="vacancyDescription" name="vacancy[description]" class="form-control"></textarea>
-                </div>
-            </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
 
-        <fieldset>
-            <legend>Translations</legend>
-            <div class="row">
-            {% for language in languages %}
+            $( ".show-vacancy-form-btn" ).click(function() {
+                getAddVacancyBlock().show();
+                return false;
+            });
 
-                    <div class="form-group col-lg-4">
-                        <label for="vacancyTitle">Title ({{ language.shortName }}):</label>
-                        <input type="text" id="vacancyTitle" maxlength="100" name="vacancy[translation][{{ language.id }}][title]" class="form-control" />
+            $( ".hide-vacancy-form-btn" ).click(function() {
+                getAddVacancyBlock().hide();
+                return false;
+            });
 
-                        <label for="vacancyDescription">Description ({{ language.shortName }}):</label>
-                        <textarea id="vacancyDescription" name="vacancy[translation][{{ language.id }}][description]" class="form-control"></textarea>
-                    </div>
-            {% endfor %}
-            </div>
-        </fieldset>
-        <button type="submit" class="btn btn-primary col-lg-2">Submit</button>
-    </form>
+            $( ".filter-controls" ).change(function() {
+                showNewVacancies();
+            });
 
+            $("#vacancy-table-body").on("click", ".remove-vacancy", function() {
+                if (confirm('Are you sure?')) {
+                    var url = $(this).data('url');
+                    var vacancyId = $(this).data('vacancyId');
+
+                    $.ajax({
+                        type: "get",
+                        dataType: "json",
+                        url: url
+                    }).done(function( response ) {
+                        if (response.status == 1) {
+                            $('#' + generateVacancyRowId(vacancyId)).hide();
+                            recalculateVacancyRowsBackground();
+                        } else {
+                            alert(response.message);
+                        }
+                    });
+                }
+            });
+
+
+            getVacancyForm().submit(function() {
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: getVacancyForm().attr('action'),
+                    data: getVacancyForm().serialize()
+                }).done(function( response ) {
+                    if (response.status == 1) {
+                        resetDepartmentFilter();
+                        showNewVacancies();
+                        resetVacancyForm();
+                        getAddVacancyBlock().hide();
+                    } else {
+                        alert(response.message);
+                    }
+                });
+
+                return false;
+            })
+        });
+
+        function showNewVacancies()
+        {
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                url: getFilterForm().attr('action'),
+                data: getFilterForm().serialize()
+            }).done(function( response ) {
+                if (response.status == 1) {
+                    var vacanciesRows = generateVacancyTableRows(response.vacancies);
+                    $("#vacancy-table-body").empty().append(vacanciesRows);
+                } else {
+                    alert(response.message);
+                }
+            });
+        }
+
+        function generateVacancyTableRows(vacancies)
+        {
+            var vacancyRows = [];
+            var counter = 0;
+            for (var idx in vacancies) {
+                var vacancy = vacancies[idx];
+                var vacancyRow = $(".vacancy-row-template").clone();
+
+                if (counter % 2 == 0) {
+                    vacancyRow.addClass("odd");
+                }
+
+                vacancyRow.removeClass("vacancy-row-template");
+                vacancyRow.attr('id', generateVacancyRowId(vacancy.id));
+
+                var title = vacancy.title;
+                var description = vacancy.description;
+                if (vacancy.translations.length) {
+                    title = vacancy.translations[0].title;
+                    description = vacancy.translations[0].description;
+
+                    var language = vacancy.translations[0].language.title;
+                    vacancyRow.find('.vacancy-language').text(language);
+                }
+
+                vacancyRow.find('.vacancy-id').text(vacancy.id);
+                vacancyRow.find('.vacancy-department').text(vacancy.department.title);
+                vacancyRow.find('.vacancy-title').text(title);
+                vacancyRow.find('.vacancy-description').text(description);
+
+                vacancyRow.find('.remove-vacancy').attr('data-vacancy-id', vacancy.id);
+
+                var deleteUrlPattern = vacancyRow.find('.remove-vacancy').attr('data-url');
+                vacancyRow.find('.remove-vacancy').attr('data-url', prepareDeleteUrl(deleteUrlPattern, vacancy.id));
+
+                vacancyRows[counter] = vacancyRow;
+                counter++;
+            }
+
+            return vacancyRows;
+        }
+
+        function getFilterForm()
+        {
+            return $("#filter-form");
+        }
+
+        function getVacancyForm()
+        {
+            return $("#add-vacancy");
+        }
+
+        function resetVacancyForm()
+        {
+            document.getElementById("add-vacancy").reset();
+        }
+
+        function getAddVacancyBlock()
+        {
+            return $(".add-vacancy-block");
+        }
+
+        function resetDepartmentFilter()
+        {
+            $("#department").val("0");
+        }
+
+        /**
+         * @param {int} vacancyId
+         * @returns {string}
+         */
+        function generateVacancyRowId(vacancyId)
+        {
+            return 'vacancy_' + vacancyId;
+        }
+
+        function recalculateVacancyRowsBackground()
+        {
+            $("#vacancy-table-body tr").each(function() {
+                $(this).toggleClass('odd');
+            });
+        }
+
+        /**
+         * @param {string} deleteUrl
+         * @param {int} vacancyId
+         * @returns {string}
+         */
+        function prepareDeleteUrl(deleteUrl, vacancyId)
+        {
+            var deleteUrlPattern = deleteUrl.substr(0, deleteUrl.length - 1)
+            return deleteUrlPattern + vacancyId;
+        }
+    </script>
 {% endblock %}

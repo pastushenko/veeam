@@ -52,6 +52,16 @@ class VacancyRepository extends EntityRepository
     }
 
     /**
+     * @return Vacancy[]
+     */
+    public function fetchAll()
+    {
+        $qb = $this->createQueryBuilder(self::TABLE_ALIAS);
+        $qb->orderBy(self::TABLE_ALIAS.'.id', 'DESC');
+        return $qb->getQuery()->execute();
+    }
+
+    /**
      * @param VacancyFilterDto $filter
      * @return Vacancy[]
      */
@@ -59,6 +69,7 @@ class VacancyRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder(self::TABLE_ALIAS);
         $this->applyFilters($qb, $filter);
+        $qb->orderBy(self::TABLE_ALIAS.'.id', 'DESC');
         return $qb->getQuery()->execute();
     }
 

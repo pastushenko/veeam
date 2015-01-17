@@ -39,7 +39,7 @@ class VacancyController extends Controller
         return $this->render('VacancyUiBundle:Vacancy:index.html.twig', array(
             'departments' => $this->departmentRepository->findAll(),
             'languages' => $this->languageRepository->findAll(),
-            'vacancies' => $this->vacancyRepository->findAll()
+            'vacancies' => $this->vacancyRepository->fetchAll()
         ));
     }
 }

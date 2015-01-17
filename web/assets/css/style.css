@@ -18,6 +18,18 @@ label {
     display: none;
 }
 
-.vacancy-list tr {
-    line-height: 25px;
+.vacancy-list td, .vacancy-list th {
+    padding: 3px 10px;
+}
+
+.add-vacancy-block {
+    display: none;
+    margin-bottom: 50px;
+}
+
+.show-vacancy-form-btn, .hide-vacancy-form-btn {
+    text-decoration: underline;
+}
+button.hide-vacancy-form-btn {
+    margin-left: 20px;
 }
