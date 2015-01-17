@@ -80,4 +80,23 @@ class Vacancy
     {
         return $this->department;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $translationArray = [];
+        foreach ($this->getTranslations() as $translation) {
+            $translationArray[$translation->getId()] = $translation->toArray();
+        }
+
+        return [
+            'id' => $this->getId(),
+            'department' => $this->getDepartment()->toArray(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'translations' => $translationArray
+        ];
+    }
 }

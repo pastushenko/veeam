@@ -1,9 +1,11 @@
 <?php
+namespace Vacancy\UiBundle\Dto;
+
 use Symfony\Component\HttpFoundation\Request;
 use Vacancy\UtilsBundle\Exception\WrongDataTypeException;
 use Vacancy\UtilsBundle\UtilTrait\NumberValidationTrait;
 
-class FilterDto
+class VacancyFilterDto
 {
     use NumberValidationTrait;
 
@@ -42,7 +44,7 @@ class FilterDto
 
     /**
      * @param Request $request
-     * @throws Exception
+     * @throws \Exception
      */
     private function fetchDepartmentId(Request $request)
     {
@@ -57,7 +59,7 @@ class FilterDto
 
     /**
      * @param Request $request
-     * @throws Exception
+     * @throws \Exception
      */
     private function fetchLanguageId(Request $request)
     {
@@ -72,7 +74,7 @@ class FilterDto
 
     /**
      * @param int $departmentId
-     * @throws Exception
+     * @throws \Exception
      */
     private function checkDepartmentId($departmentId)
     {
@@ -85,7 +87,7 @@ class FilterDto
 
     /**
      * @param int $languageId
-     * @throws Exception
+     * @throws \Exception
      */
     private function checkLanguageId($languageId)
     {

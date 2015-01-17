@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: "@VacancyUiBundle/Resources/config/services.xml" }
+    - { resource: "@VacancyApiBundle/Resources/config/services.xml" }
     - { resource: "@VacancyUtilsBundle/Resources/config/services.xml" }
 
 framework:

@@ -1,2 +1,6 @@
+VacancyApiBundle:
+    prefix:   /api/v1
+    resource: "@VacancyApiBundle/Resources/config/routing.yml"
 VacancyUiBundle:
+    prefix:   /
     resource: "@VacancyUiBundle/Resources/config/routing.yml"

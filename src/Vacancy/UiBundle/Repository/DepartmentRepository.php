@@ -3,8 +3,6 @@ namespace Vacancy\UiBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Vacancy\UiBundle\Entity\Department;
-use Vacancy\UtilsBundle\Entity\RatesCollection;
-use Vacancy\UiBundle\Entity\Rate;
 use Vacancy\UtilsBundle\UtilTrait\TransactionTrait;
 
 class DepartmentRepository extends EntityRepository

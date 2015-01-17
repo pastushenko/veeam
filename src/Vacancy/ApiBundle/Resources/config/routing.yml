@@ -1,0 +1,3 @@
+api_get_vacancies:
+    pattern:  /get
+    defaults: { _controller: apiBundle.vacancyApi.controller:getAction }

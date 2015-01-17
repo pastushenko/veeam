@@ -1,10 +1,6 @@
 <?php
 namespace Vacancy\UiBundle\Controller;
 
-use Vacancy\UiBundle\Entity\Department;
-use Vacancy\UiBundle\Entity\Language;
-use Vacancy\UiBundle\Entity\Vacancy;
-use Vacancy\UiBundle\Entity\VacancyTranslation;
 use Vacancy\UiBundle\Repository\DepartmentRepository;
 use Vacancy\UiBundle\Repository\LanguageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

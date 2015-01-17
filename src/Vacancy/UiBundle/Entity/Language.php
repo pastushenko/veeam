@@ -51,4 +51,16 @@ class Language
     {
         return $this->id;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'shortName' => $this->getShortName(),
+            'title' => $this->getTitle()
+        ];
+    }
 }
