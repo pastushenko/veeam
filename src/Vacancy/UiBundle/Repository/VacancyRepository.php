@@ -24,25 +24,9 @@ class VacancyRepository extends EntityRepository
 
     /**
      * @param VacancyFilterDto $filter
-     * @return array
-     */
-    public function getVacanciesAsArray(VacancyFilterDto $filter)
-    {
-        $vacancyArray = [];
-
-        $vacancies = $this->findByFiler($filter);
-        foreach ($vacancies as $vacancy) {
-            $vacancyArray[$vacancy->getId()] = $vacancy->toArray();
-        }
-
-        return $vacancyArray;
-    }
-
-    /**
-     * @param VacancyFilterDto $filter
      * @return Vacancy[]
      */
-    private function findByFiler(VacancyFilterDto $filter)
+    public function fetchByFiler(VacancyFilterDto $filter)
     {
         $qb = $this->createQueryBuilder(self::TABLE_ALIAS);
         $this->applyFilters($qb, $filter);

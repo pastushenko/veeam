@@ -8,6 +8,7 @@
 
         <service id="apiBundle.vacancyApi.controller" class="Vacancy\ApiBundle\Controller\VacancyApiController">
             <argument type="service" id="uiBundle.vacancy.repository" />
+            <argument type="service" id="uiBundle.vacancyTranslation.repository" />
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

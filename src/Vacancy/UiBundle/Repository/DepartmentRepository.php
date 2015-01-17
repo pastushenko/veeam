@@ -22,7 +22,7 @@ class DepartmentRepository extends EntityRepository
      * @return Department
      * @throws \Exception
      */
-    public function getDepartment($departmentId)
+    public function fetchDepartment($departmentId)
     {
         $department = $this->find($departmentId);
 

@@ -11,6 +11,7 @@ use Vacancy\UiBundle\Entity\VacancyTranslation;
 use Vacancy\UiBundle\Repository\DepartmentRepository;
 use Vacancy\UiBundle\Repository\LanguageRepository;
 use Vacancy\UiBundle\Repository\VacancyRepository;
+use Vacancy\UiBundle\Repository\VacancyTranslationRepository;
 use Vacancy\UtilsBundle\Exception\EntityNotFoundException;
 use Vacancy\UtilsBundle\Exception\RepositoryNotEmptyException;
 use Vacancy\UtilsBundle\Repository\DefaultDataRepository;
@@ -19,6 +20,8 @@ class FillDbCommand extends Command
 {
     /** @var VacancyRepository */
     private $vacancyRepository;
+    /** @var VacancyTranslationRepository */
+    private $vacancyTranslationRepository;
     /** @var DepartmentRepository */
     private $departmentRepository;
     /** @var LanguageRepository */
@@ -40,6 +43,14 @@ class FillDbCommand extends Command
     public function setVacancyRepository(VacancyRepository $vacancyRepository)
     {
         $this->vacancyRepository = $vacancyRepository;
+    }
+
+    /**
+     * @param VacancyTranslationRepository $vacancyTranslationRepository
+     */
+    public function setVacancyTranslationRepository(VacancyTranslationRepository $vacancyTranslationRepository)
+    {
+        $this->vacancyTranslationRepository = $vacancyTranslationRepository;
     }
 
     /**
@@ -167,6 +178,18 @@ class FillDbCommand extends Command
     /**
      * @throws \Exception
      */
+    private function getVacancyTranslationRepository()
+    {
+        if (is_null($this->vacancyTranslationRepository)) {
+            throw new \Exception('You must inject vacancy translation repository in fill db command (call setVacancyTranslationRepository()).');
+        }
+
+        return $this->vacancyTranslationRepository;
+    }
+
+    /**
+     * @throws \Exception
+     */
     private function getDepartmentRepository()
     {
         if (is_null($this->departmentRepository)) {
@@ -220,6 +243,9 @@ class FillDbCommand extends Command
             }
 
             $this->vacancyRepository->persist($vacancy);
+            foreach ($vacancy->getTranslations() as $translation) {
+                $this->getVacancyTranslationRepository()->persist($translation);
+            }
         }
     }
 
@@ -287,23 +313,26 @@ class FillDbCommand extends Command
 
     private function beginTransaction()
     {
-        $this->vacancyRepository->beginTransaction();
-        $this->departmentRepository->beginTransaction();
-        $this->languageRepository->beginTransaction();
+        $this->getVacancyRepository()->beginTransaction();
+        $this->getVacancyTranslationRepository()->beginTransaction();
+        $this->getDepartmentRepository()->beginTransaction();
+        $this->getLanguageRepository()->beginTransaction();
     }
 
     private function commit()
     {
-        $this->vacancyRepository->commit();
-        $this->departmentRepository->commit();
-        $this->languageRepository->commit();
+        $this->getVacancyRepository()->commit();
+        $this->getVacancyTranslationRepository()->commit();
+        $this->getDepartmentRepository()->commit();
+        $this->getLanguageRepository()->commit();
     }
 
     private function rollback()
     {
-        $this->vacancyRepository->rollback();
-        $this->departmentRepository->rollback();
-        $this->languageRepository->rollback();
+        $this->getVacancyRepository()->rollback();
+        $this->getVacancyTranslationRepository()->rollback();
+        $this->getDepartmentRepository()->rollback();
+        $this->getLanguageRepository()->rollback();
     }
 
     /**

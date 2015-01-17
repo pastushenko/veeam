@@ -81,6 +81,7 @@ class VacancyTranslation
     {
         return [
             'id' => $this->getId(),
+            'vacancyId' => $this->getVacancy()->getId(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'language' => $this->getLanguage()->toArray()

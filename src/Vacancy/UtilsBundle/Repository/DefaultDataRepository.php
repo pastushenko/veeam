@@ -99,18 +99,18 @@ class DefaultDataRepository
                 'translations' => [
                     [
                         'language' => 'it',
-                        'title' => 'vacancy #1 it',
-                        'description' => 'description #1 it. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        'title' => 'vacancy #6 it',
+                        'description' => 'description #6 it. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
                     ],
                     [
                         'language' => 'ru',
-                        'title' => 'vacancy #1 ru',
-                        'description' => 'description #1 ru. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        'title' => 'vacancy #6 ru',
+                        'description' => 'description #6 ru. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
                     ],
                     [
                         'language' => 'fr',
-                        'title' => 'vacancy #1 fr',
-                        'description' => 'description #1 fr. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        'title' => 'vacancy #6 fr',
+                        'description' => 'description #6 fr. Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
                     ]
                 ]
             ]

@@ -22,6 +22,13 @@
             <argument>Vacancy\UiBundle\Entity\Vacancy</argument>
         </service>
 
+        <service id="uiBundle.vacancyTranslation.repository"
+                 class="Exchange\UiBundle\Repository\VacancyTranslationRepository"
+                 factory-service="doctrine.orm.default_entity_manager"
+                 factory-method="getRepository">
+            <argument>Vacancy\UiBundle\Entity\VacancyTranslation</argument>
+        </service>
+
         <service id="uiBundle.department.repository"
                  class="Exchange\UiBundle\Repository\DepartmentRepository"
                  factory-service="doctrine.orm.default_entity_manager"

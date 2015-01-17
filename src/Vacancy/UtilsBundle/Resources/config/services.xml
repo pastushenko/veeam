@@ -14,6 +14,9 @@
             <call method="setVacancyRepository">
                 <argument type="service" id="uiBundle.vacancy.repository" />
             </call>
+            <call method="setVacancyTranslationRepository">
+                <argument type="service" id="uiBundle.vacancyTranslation.repository" />
+            </call>
             <call method="setDepartmentRepository">
                 <argument type="service" id="uiBundle.department.repository" />
             </call>

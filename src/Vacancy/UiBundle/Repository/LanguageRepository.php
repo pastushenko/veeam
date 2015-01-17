@@ -23,7 +23,7 @@ class LanguageRepository extends EntityRepository
      * @return Language
      * @throws \Exception
      */
-    public function getLanguage($languageId)
+    public function fetchLanguage($languageId)
     {
         $language = $this->find($languageId);
 
