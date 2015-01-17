@@ -1,38 +1,58 @@
 {% extends 'VacancyUiBundle::layout.html.twig' %}
 
 {% block content %}
-    <h1>Вакансии</h1>
-    <form id="filters">
-        <div class="col-lg-4">
-            <label for="department">Department</label>
-            <select id="department" name="department">
-                <option value="0">all</option>
-                {% for department in departments %}
-                    <option value="{{ department.id }}">{{ department.title }}</option>
+    {% import _self as helper %}
+    <h1>Vacancy list</h1>
+    <div class="row">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <select id="department" name="department" class="form-control">
+                    <option value="0">Select Department</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}">{{ department.title }}</option>
+                    {% endfor %}
+                </select>
+                <select id="language" name="language" class="form-control">
+                    <option value="0">English</option>
+                    {% for language in languages %}
+                        <option value="{{ language.id }}">{{ language.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Find</button>
+        </form>
+    </div>
+    <div style="clear:both;"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Results:</strong></div>
+        <div class="panel-body">
+            <table class="col-lg-12 vacancy-list">
+                <thead>
+                <tr>
+                    <th width="5%">Id</th>
+                    <th width="10%">Department</th>
+                    <th width="10%">Language</th>
+                    <th width="15%">Title</th>
+                    <th width="45%">Description</th>
+                    <th width="15%">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for vacancy in vacancies %}
+                    <tr id="vacancy_{{ vacancy.id }}" {% if loop.index is odd %}class="odd"{% endif %}>
+                        <td>{{ vacancy.id }}</td>
+                        <td>{{ vacancy.department.title }}</td>
+                        <td>English</td>
+                        <td>{{ vacancy.title }}</td>
+                        <td>{{ vacancy.description }}</td>
+                        <td>
+                            <button title="Edit vacancy" data-vacancy-id="{{ vacancy.id }}" class="glyphicon glyphicon-pencil edit-vacancy"></button>
+                            <button title="Remove vacancy" data-vacancy-id="{{ vacancy.id }}" class="glyphicon glyphicon-minus remove-vacancy"></button>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </select>
+                </tbody>
+            </table>
         </div>
-    </form>
-    <table class="col-lg-12">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Department</th>
-                <th>Language</th>
-                <th>Title</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for vacancy in vacancies %}
-            <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                <td>{{ vacancy.id }}</td>
-                <td>{{ vacancy.department.title }}</td>
-                <td>Language</td>
-                <td>{{ vacancy.title }}</td>
-                <td>{{ vacancy.description }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    </div>
 {% endblock %}
