@@ -1,9 +1,19 @@
-api_list_vacancies:
+api_vacancy_list:
     pattern:  /vacancy/list
     defaults: { _controller: apiBundle.vacancyApi.controller:listAction }
 
-api_get_vacancy:
+api_vacancy_get:
     pattern:  /vacancy/get/{vacancyId}
     defaults: { _controller: apiBundle.vacancyApi.controller:getAction }
+    requirements:
+        vacancyId: \d+
+
+api_vacancy_add:
+    pattern:  /vacancy/add
+    defaults: { _controller: apiBundle.vacancyApi.controller:addAction }
+
+api_vacancy_remove:
+    pattern:  /vacancy/remove/{vacancyId}
+    defaults: { _controller: apiBundle.vacancyApi.controller:removeAction }
     requirements:
         vacancyId: \d+

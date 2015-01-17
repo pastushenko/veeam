@@ -3,11 +3,11 @@ namespace Vacancy\UiBundle\Dto;
 
 use Symfony\Component\HttpFoundation\Request;
 use Vacancy\UtilsBundle\Exception\WrongDataTypeException;
-use Vacancy\UtilsBundle\UtilTrait\NumberValidationTrait;
+use Vacancy\UtilsBundle\UtilTrait\DataValidationTrait;
 
 class VacancyFilterDto
 {
-    use NumberValidationTrait;
+    use DataValidationTrait;
 
     const KEY_DEPARTMENT_ID = 'department';
     const KEY_LANGUAGE_ID = 'language';

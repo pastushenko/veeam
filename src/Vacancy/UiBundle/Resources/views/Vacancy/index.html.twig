@@ -19,7 +19,6 @@
                     {% endfor %}
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Find</button>
         </form>
     </div>
     <div style="clear:both;"></div>
@@ -55,4 +54,49 @@
             </table>
         </div>
     </div>
+
+    <h2>Add vacancy:</h2>
+    <form id="addVacancy" method="post" action="{{ path('api_vacancy_add') }}">
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <label for="vacancyTitle">Title:</label>
+                    <input type="text" id="vacancyTitle" maxlength="100" name="vacancy[title]" class="form-control" />
+                </div>
+
+                <div class="form-group col-lg-2">
+                    <label for="vacancyDepartment">Department:</label>
+                    <select id="vacancyDepartment" name="vacancy[department]" class="form-control">
+                        {% for department in departments %}
+                            <option value="{{ department.id }}">{{ department.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <label for="vacancyDescription">Description:</label>
+                    <textarea id="vacancyDescription" name="vacancy[description]" class="form-control"></textarea>
+                </div>
+            </div>
+
+        <fieldset>
+            <legend>Translations</legend>
+            <div class="row">
+            {% for language in languages %}
+
+                    <div class="form-group col-lg-4">
+                        <label for="vacancyTitle">Title ({{ language.shortName }}):</label>
+                        <input type="text" id="vacancyTitle" maxlength="100" name="vacancy[translation][{{ language.id }}][title]" class="form-control" />
+
+                        <label for="vacancyDescription">Description ({{ language.shortName }}):</label>
+                        <textarea id="vacancyDescription" name="vacancy[translation][{{ language.id }}][description]" class="form-control"></textarea>
+                    </div>
+            {% endfor %}
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary col-lg-2">Submit</button>
+    </form>
+
 {% endblock %}

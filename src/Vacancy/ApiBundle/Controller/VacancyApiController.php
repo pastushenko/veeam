@@ -2,11 +2,14 @@
 namespace Vacancy\ApiBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Vacancy\ApiBundle\Validator\VacancyValidator;
 use Vacancy\UiBundle\Dto\VacancyFilterDto;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Vacancy\UiBundle\Entity\Vacancy;
 use Vacancy\UiBundle\Entity\VacancyTranslation;
+use Vacancy\UiBundle\Repository\DepartmentRepository;
+use Vacancy\UiBundle\Repository\LanguageRepository;
 use Vacancy\UiBundle\Repository\VacancyRepository;
 use Vacancy\UiBundle\Repository\VacancyTranslationRepository;
 
@@ -22,17 +25,27 @@ class VacancyApiController extends Controller
     private $vacancyRepository;
     /** @var VacancyTranslationRepository */
     private $vacancyTranslationRepository;
+    /** @var DepartmentRepository */
+    private $departmentRepository;
+    /** @var LanguageRepository */
+    private $languageRepository;
 
     /**
      * @param VacancyRepository $vacancyRepository
      * @param VacancyTranslationRepository $vacancyTranslationRepository
+     * @param DepartmentRepository $departmentRepository
+     * @param LanguageRepository $languageRepository
      */
     public function __construct(
         VacancyRepository $vacancyRepository,
-        VacancyTranslationRepository $vacancyTranslationRepository
+        VacancyTranslationRepository $vacancyTranslationRepository,
+        DepartmentRepository $departmentRepository,
+        LanguageRepository $languageRepository
     ) {
         $this->vacancyRepository = $vacancyRepository;
         $this->vacancyTranslationRepository = $vacancyTranslationRepository;
+        $this->departmentRepository = $departmentRepository;
+        $this->languageRepository = $languageRepository;
     }
 
     /**
@@ -105,9 +118,72 @@ class VacancyApiController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function addVacancy(Request $request)
+    public function addAction(Request $request)
     {
-        return $this->render('VacancyApiBundle:VacancyApi:json.html.twig', array());
+        $this->vacancyRepository->beginTransaction();
+        $this->vacancyTranslationRepository->beginTransaction();
+
+        try {
+            $vacancyValidator = new VacancyValidator($request);
+            $department = $this->departmentRepository->fetchDepartment($vacancyValidator->getDepartmentId());
+            $vacancy = $this->vacancyRepository->persistFromValidator($vacancyValidator, $department);
+
+            foreach($vacancyValidator->getTranslations() as $translationValidator) {
+                $language = $this->languageRepository->fetchLanguage($translationValidator->getLanguageId());
+                $this->vacancyTranslationRepository->persistFromValidator($translationValidator, $vacancy, $language);
+            }
+
+            $this->vacancyRepository->commit();
+            $this->vacancyTranslationRepository->commit();
+            $status = self::STATUS_OK;
+            $message = self::MESSAGE_OK;
+
+        } catch (\Exception $ex) {
+            $this->vacancyRepository->rollback();
+            $this->vacancyTranslationRepository->rollback();
+            $status = self::STATUS_ERROR;
+            $message = sprintf(self::MESSAGE_ERR, $ex->getMessage());
+        }
+
+        return $this->render('VacancyApiBundle:VacancyApi:json.html.twig', array(
+            'response' => [
+                'status' => $status,
+                'message' => $message
+            ]
+        ));
+    }
+
+    /**
+     * @param \int $vacancyId
+     * @return Response
+     */
+    public function removeAction($vacancyId)
+    {
+        $this->vacancyRepository->beginTransaction();
+        $this->vacancyTranslationRepository->beginTransaction();
+
+        try {
+            $this->vacancyTranslationRepository->removeByVacancyId($vacancyId);
+            $this->vacancyRepository->removeById($vacancyId);
+
+            $this->vacancyRepository->commit();
+            $this->vacancyTranslationRepository->commit();
+            $status = self::STATUS_OK;
+            $message = self::MESSAGE_OK;
+
+        } catch (\Exception $ex) {
+            $this->vacancyRepository->rollback();
+            $this->vacancyTranslationRepository->rollback();
+            $status = self::STATUS_ERROR;
+            $message = sprintf(self::MESSAGE_ERR, $ex->getMessage());
+        }
+
+        return $this->render('VacancyApiBundle:VacancyApi:json.html.twig', array(
+            'response' => [
+                'status' => $status,
+                'message' => $message
+            ]
+        ));
     }
 
     /**

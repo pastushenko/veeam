@@ -3,7 +3,9 @@ namespace Vacancy\UiBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Vacancy\ApiBundle\Validator\VacancyTranslationValidator;
 use Vacancy\UiBundle\Dto\VacancyFilterDto;
+use Vacancy\UiBundle\Entity\Language;
 use Vacancy\UiBundle\Entity\Vacancy;
 use Vacancy\UiBundle\Entity\VacancyTranslation;
 use Vacancy\UtilsBundle\UtilTrait\TransactionTrait;
@@ -21,6 +23,26 @@ class VacancyTranslationRepository extends EntityRepository
     {
         $this->getEntityManager()->persist($vacancyTranslation);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param VacancyTranslationValidator $translationValidator
+     * @param Vacancy $vacancy
+     * @param Language $language
+     * @return VacancyTranslation
+     */
+    public function persistFromValidator(
+        VacancyTranslationValidator $translationValidator,
+        Vacancy $vacancy,
+        Language $language
+    ) {
+        $translation = new VacancyTranslation($vacancy, $language, $translationValidator->getTitle());
+        $translation->getDescription($translationValidator->getDescription());
+
+        $this->getEntityManager()->persist($translation);
+        $this->getEntityManager()->flush();
+
+        return $translation;
     }
 
     /**
@@ -48,6 +70,17 @@ class VacancyTranslationRepository extends EntityRepository
         $this->applyLanguageFilter($qb, $languageId);
 
         return $qb->getQuery()->execute();
+    }
+
+    /**
+     * @param \int $vacancyId
+     */
+    public function removeByVacancyId($vacancyId)
+    {
+        $qb = $this->createQueryBuilder(self::TABLE_ALIAS);
+        $qb->delete();
+        $qb->where(self::TABLE_ALIAS.'.vacancy = :vacancy')->setParameter('vacancy', $vacancyId);
+        $qb->getQuery()->execute();
     }
 
     /**
