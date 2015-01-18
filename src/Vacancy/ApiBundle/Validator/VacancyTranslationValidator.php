@@ -3,6 +3,7 @@ namespace Vacancy\ApiBundle\Validator;
 
 use Symfony\Component\HttpFoundation\Request;
 use Vacancy\UiBundle\Entity\Department;
+use Vacancy\UtilsBundle\Exception\WrongDataStructureException;
 use Vacancy\UtilsBundle\Exception\WrongDataTypeException;
 use Vacancy\UtilsBundle\UtilTrait\DataValidationTrait;
 
@@ -68,7 +69,7 @@ class VacancyTranslationValidator
     private function fetchTitle(array $translationData)
     {
         if (!isset($translationData[self::TITLE_KEY])) {
-            throw new \Exception(sprintf('Translation data must contain "%s" key.', self::TITLE_KEY));
+            throw new WrongDataStructureException(sprintf('Translation data must contain "%s" key.', self::TITLE_KEY));
         }
 
         $title = $translationData[self::TITLE_KEY];
@@ -88,7 +89,7 @@ class VacancyTranslationValidator
             return;
         }
 
-        $description = $translationData[self::TITLE_KEY];
+        $description = $translationData[self::DESCRIPTION_KEY];
         $this->checkIsString($description);
 
         $this->description = $description;

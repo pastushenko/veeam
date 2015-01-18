@@ -32,8 +32,8 @@
             <fieldset>
                 <legend>Translations</legend>
                 <div class="row">
-                    {% for language in languages %}
 
+                    {% for language in languages %}
                         <div class="form-group col-lg-4">
                             <label for="vacancyTitle">Title ({{ language.shortName }}):</label>
                             <input type="text" id="vacancyTitle" maxlength="100" name="vacancy[translation][{{ language.id }}][title]" class="form-control" />
@@ -42,6 +42,7 @@
                             <textarea id="vacancyDescription" name="vacancy[translation][{{ language.id }}][description]" class="form-control"></textarea>
                         </div>
                     {% endfor %}
+
                 </div>
             </fieldset>
             <button type="submit" class="btn btn-primary col-lg-2">Submit</button>
