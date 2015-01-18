@@ -13,10 +13,10 @@
 ##Руководство по установке:
 Для работы приложения необходимы php 5.4 и драйвер php-mysql.
 Также необходимо установить mysql, phpunit.
-Необходимо создать пользователя и бд (тип хранилища InnoDB).
-* Сперва склонируйте к себе проект: <code>git clone https://github.com/pastushenko/veeam.git</code>
-* Выполните composer: <code>php composer.phar install</code>
-* Укажите настройки бд (остальные пропустите).
+* Создайте пользователя и бд (тип хранилища InnoDB). Дайте ему права.
+* Склонируйте к себе проект: <code>git clone https://github.com/pastushenko/veeam.git</code>
+* Перейдите в директорию проекта: <code>cd veeam</code>
+* Выполните composer: <code>php composer.phar install</code>. В вопросах укажите данные о подключении к бд (остальные можно пропустить).
 * Выполните команду генерирующею схему бд: <code>./app/console doctrine:schema:create</code>
 * Выполните команду генерирующею тестовые данные в бд: <code>./app/console vacancies:initial-fill-db</code>
 * Для запуска веб сервера используйте команду: <code>./app/console server:run</code>
